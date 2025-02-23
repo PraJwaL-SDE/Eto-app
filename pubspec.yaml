@@ -1,0 +1,46 @@
+name: eto_ride
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_native_splash: ^2.2.15
+  get: ^4.7.2
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter_native_splash:
+  color: "#FFEB3B"                 # Background color (yellow)
+  image: assets/images/splash.png # Path to your splash image
+  android_12:
+    image: assets/images/splash.png # Path to your splash image
+  android: true                   # Enable Android splash
+  ios: true                       # Enable iOS splash
+  web: false                      # Disable web splash
+  android_gravity: center         # Center the logo on Android
+  ios_content_mode: center        # Center the logo on iOS
+  fullscreen: true                # Use fullscreen for the splash screen
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Baloo_2
+      fonts:
+        - asset: font/baloo_2/Baloo2-Regular.ttf
+        - asset: font/baloo_2/Baloo2-Medium.ttf
+
