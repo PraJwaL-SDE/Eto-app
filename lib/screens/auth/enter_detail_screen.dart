@@ -1,3 +1,4 @@
+import 'package:eto_ride/screens/bottom_nav/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -43,13 +44,13 @@ class _EnterDetailScreenState extends State<EnterDetailScreen> {
           children: [
             CustomText(
               text: "Enter Details",
-              fontSize: 30,
+              fontSize: 40,
               fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 8),
             CustomText(
               text: "Enter your basic details to get started",
-              fontSize: 16,
+              fontSize: 18,
             ),
             const SizedBox(height: 16),
             // Custom input fields
@@ -80,7 +81,7 @@ class _EnterDetailScreenState extends State<EnterDetailScreen> {
             const SizedBox(height: 16),
             ContinueBtn(
               onPressed: () {
-                // Handle OTP verification logic
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>BottomNavigation(firebaseUser: null)));
               },
               text: "Continue",
               backgroundColor: Colors.black,
@@ -117,7 +118,7 @@ class CustomDetailInput extends StatelessWidget {
       children: [
         CustomText(
           text: label,
-          fontSize: 14,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: 8),
@@ -132,7 +133,7 @@ class CustomDetailInput extends StatelessWidget {
             inputFormatters: inputFormatters,
             decoration: InputDecoration(
               hintText: hint,
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: TextStyle(color: Colors.grey,fontSize: 18),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(
                 vertical: 12.0,

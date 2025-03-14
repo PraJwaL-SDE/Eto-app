@@ -1,6 +1,7 @@
 import 'package:eto_ride/screens/auth/enter_moble_screen.dart';
 import 'package:eto_ride/widgets/continue_btn.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({super.key});
@@ -106,14 +107,17 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 : Align(
               alignment: Alignment.topRight,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async{
                   if (currentSlideIndex == slidesData.length - 1) {
+
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => EnterMobleScreen(),
                       ),
                     );
+                    var getStartVal = await  Hive.openBox<bool>('settingsBox');
+                    getStartVal.put("get_start", true); // Save the value in the box
                   } else {
                     setState(() {
                       currentSlideIndex++;
