@@ -28,6 +28,7 @@ dependencies:
   shared_preferences: ^2.5.2
   google_maps_flutter: ^2.10.1
   dashed_circle: ^0.0.2
+  sliding_up_panel: ^2.0.0+1
 
 
 dev_dependencies:
@@ -52,7 +53,18 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/images/
+    - assets/images/rating/
+    - assets/images/refer/
+    - assets/images/service/
+    - assets/images/coin/
+    - assets/images/get_started/
+    - assets/images/home/
+    - assets/icons/account/
+    - assets/icons/payment/
+    - assets/icons/profile/
+
 
   fonts:
     - family: Baloo_2

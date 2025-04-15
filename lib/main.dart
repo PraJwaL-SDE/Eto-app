@@ -1,21 +1,25 @@
-import 'package:eto_ride/screens/activity/activity_screen.dart';
-import 'package:eto_ride/screens/bottom_nav/bottom_navigation.dart';
-import 'package:eto_ride/screens/bottom_nav/home_screen.dart';
-import 'package:eto_ride/screens/coupon/coupon_code_screen.dart';
-import 'package:eto_ride/screens/emergency/calling_emergency_screen.dart';
-import 'package:eto_ride/screens/map/map_sample.dart';
-import 'package:eto_ride/screens/navigation/navigation_screen.dart';
-import 'package:eto_ride/screens/payment/select_payment_screen.dart';
-import 'package:eto_ride/screens/ride/ride_complete_screen.dart';
-import 'package:eto_ride/screens/ride/ride_detail_screen.dart';
+import 'package:eto_ride/app/modules/shell/view/shell_view.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:eto_ride/screens/get_started/select_language_screen.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'app/core/themes/app_theme_controller.dart';
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
+
 
 void main() async{
   runApp(const MyApp());
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   SystemUiOverlayStyle(
+  //     statusBarColor: Colors.white,
+  //     statusBarIconBrightness: Brightness.dark,
+  //   ),
+  // );
   await Firebase.initializeApp(
     options: FirebaseOptions(
       apiKey: "AIzaSyC5jhKK0jB-wG0Cbxas0h0TsqxmtvfCynk",
@@ -38,15 +42,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final themeController = Get.put(ThemeController()); // Initialize theme controller
+
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Baloo_2",
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const SplashScreen(),
+      theme: themeController.theme, // Use the theme from the controller
+      initialRoute: AppRoutes.SHELL, // Set initial route
+      getPages: AppPages.pages, // Use your app pages
+
     );
   }
 }
@@ -72,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  CallingEmergencyScreen(),
+          builder: (context) =>  ShellView(),
         ),
       );
     });
