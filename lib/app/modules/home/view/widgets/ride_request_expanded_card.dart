@@ -4,6 +4,7 @@ import 'package:eto_ride/app/modules/home/view/widgets/ride_request_card.dart';
 import 'package:flutter/material.dart';
 
 class RideRequestExpandedCard extends StatelessWidget {
+
   const RideRequestExpandedCard({super.key});
 
   @override
@@ -23,10 +24,10 @@ class RideRequestExpandedCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.0),
               border: Border.all(color: Theme.of(context).primaryColor),
             ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: PickupAndDropCard(),
-            ),
+            // child: const Padding(
+            //   padding: EdgeInsets.all(8.0),
+            //   child: PickupAndDropCard(),
+            // ),
           ),
         ),
         const SizedBox(height: 20),

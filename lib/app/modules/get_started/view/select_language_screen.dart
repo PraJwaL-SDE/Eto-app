@@ -1,3 +1,5 @@
+import 'package:eto_ride/app/data/storage/setting_storage.dart';
+import 'package:eto_ride/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../common/view/continue_btn.dart';
@@ -59,6 +61,7 @@ class SelectLanguageScreen extends GetView<SelectLanguageController> {
                       () => GestureDetector(
                     onTap: () {
                       controller.updateLanguage(language["name"]!);
+
                     },
                     child: LanguageCard(
                       imageAsset: language["image"]!,
@@ -73,11 +76,15 @@ class SelectLanguageScreen extends GetView<SelectLanguageController> {
             const SizedBox(height: 20),
             Obx(
                   () => ContinueBtn(
-                onPressed:()=> controller.isLanguageSelected()
-                    ? () {
-                  Get.off(() => const UserTypeScreen());
-                }
-                    : null, // Disable button if no language is selected
+                onPressed:()async{
+                  if(controller.isLanguageSelected()){
+                    print("${controller.selectedLanguage.value} is selected");
+                    await SettingStorage()..clearSettings();
+                    SettingStorage().updateLanguage(controller.selectedLanguage.value);
+                    Get.offAndToNamed(AppRoutes.USER_TYPE);
+                  }
+                },
+
                 text: "Continue",
                 textColor: Colors.white,
                 backgroundColor: controller.isLanguageSelected()

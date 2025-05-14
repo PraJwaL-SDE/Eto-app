@@ -6,7 +6,8 @@ import '../../common/view/app_button.dart';
 import '../../common/view/app_text_field.dart';
 
 class AddBankDetailScreen extends StatelessWidget {
-  const AddBankDetailScreen({super.key});
+  final String userId;
+  const AddBankDetailScreen({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {

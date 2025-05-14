@@ -38,4 +38,6 @@ class AppRoutes {
   static const DRIVER_PROFILE   = '/driver_profile';
   static const DRIVER_PAYOUT   = '/driver_payout';
 
+  static const SPLASH   = '/splash';
+
 }

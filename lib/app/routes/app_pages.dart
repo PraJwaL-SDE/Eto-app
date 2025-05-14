@@ -17,7 +17,9 @@ import 'package:eto_ride/app/modules/driver/view/add_vehicle_insurance_screen.da
 import 'package:eto_ride/app/modules/driver/view/add_vehicle_permit_screen.dart';
 import 'package:eto_ride/app/modules/driver/view/driver_document_screen.dart';
 import 'package:eto_ride/app/modules/get_started/controller/get_started_controller.dart';
+import 'package:eto_ride/app/modules/get_started/controller/select_language_controller.dart';
 import 'package:eto_ride/app/modules/get_started/view/get_started_screen.dart';
+import 'package:eto_ride/app/modules/get_started/view/select_language_screen.dart';
 import 'package:eto_ride/app/modules/help_support/view/help_support_screen.dart';
 import 'package:eto_ride/app/modules/notification/view/notification_screen.dart';
 import 'package:eto_ride/app/modules/payment/view/driver_payout_screen.dart';
@@ -30,6 +32,7 @@ import 'package:eto_ride/app/modules/refer/view/refer_earn_screen.dart';
 import 'package:eto_ride/app/modules/ride/view/ride_complete_screen.dart';
 import 'package:eto_ride/app/modules/ride/view/ride_detail_screen.dart';
 import 'package:eto_ride/app/modules/security/view/safety_security_screen.dart';
+import 'package:eto_ride/app/modules/splash/view/splash_screen.dart';
 import 'package:get/get.dart';
 import '../modules/get_started/controller/user_type_controller.dart';
 import '../modules/get_started/view/user_type_screen.dart';
@@ -41,8 +44,16 @@ class AppPages {
   static final pages = [
     GetPage(
       name: AppRoutes.SHELL,
-      page: () => ShellView(),
+      page: () => ShellView(userType: Get.arguments['userType'], user: Get.arguments['user']),
       binding: ShellBinding(),
+    ),
+
+    GetPage(
+      name: AppRoutes.SELECT_LANGUAGE,
+      page: () => SelectLanguageScreen(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<SelectLanguageController>(() => SelectLanguageController());
+      }),
     ),
     GetPage(
       name: AppRoutes.PAYMENT_SETTING,
@@ -103,13 +114,13 @@ class AppPages {
       name: AppRoutes.GET_STARTED,
       page: () => GetStartedScreen(),
       binding: BindingsBuilder(() {
-        Get.lazyPut<GetStartedController>(() => GetStartedController(userType: UserType.DRIVER));
+        Get.lazyPut<GetStartedController>(() => GetStartedController(userType: UserType.PASSENGER));
       }),
     ),
 
     GetPage(
       name: AppRoutes.ENTER_MOBILE,
-      page: () =>  EnterMobleScreen(),
+      page: () =>  EnterMobileScreen(userType: Get.arguments['userType'],),
       binding: BindingsBuilder(() {
 
       }),
@@ -125,7 +136,7 @@ class AppPages {
 
     GetPage(
       name: AppRoutes.ENTER_DETAIL,
-      page: () =>  EnterDetailScreen(),
+      page: () =>  EnterDetailScreen(user: Get.arguments['user'],userType: Get.arguments['userType'],),
       binding: BindingsBuilder(() {
 
 
@@ -140,67 +151,86 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.DRIVER_DOCUMENTS,
-      page: () =>  DriverDocumentScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final driverId = arguments['driverId'];
+        return DriverDocumentScreen(driverId: driverId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_DRIVING_LICENSE,
-      page: () =>  AddDrivingLicenseScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddDrivingLicenseScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_PROFILE_PHOTO,
-      page: () =>  AddProfilePhotoScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        // final arguments = Get.arguments;
+        // final userId = arguments['userId'];
+        return AddProfilePhotoScreen();
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_AADHAR_CARD,
-      page: () =>  AddAadharCardScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddAadharCardScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_PAN_CARD,
-      page: () =>  AddPanCardScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddPanCardScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_REGISTRATION_CERTIFICATE,
-      page: () =>  AddRegistrationCertificateScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddRegistrationCertificateScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_VEHICLE_INSURANCE,
-      page: () =>  AddVehicleInsuranceScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddVehicleInsuranceScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_VEHICLE_PERMIT,
-      page: () =>  AddVehiclePermitScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddVehiclePermitScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
     GetPage(
       name: AppRoutes.DRIVER_BANK_DETAIL,
-      page: () =>  AddBankDetailScreen(),
-      binding: BindingsBuilder(() {
-
-      }),
+      page: () {
+        final arguments = Get.arguments;
+        final userId = arguments['userId'];
+        return AddBankDetailScreen(userId: userId);
+      },
+      binding: BindingsBuilder(() {}),
     ),
+
 
     GetPage(
       name: AppRoutes.RIDE_DETAIL,
@@ -241,6 +271,13 @@ class AppPages {
     GetPage(
       name: AppRoutes.DRIVER_PAYOUT,
       page: () =>  DriverPayoutScreen(),
+      binding: BindingsBuilder(() {
+
+      }),
+    ),
+    GetPage(
+      name: AppRoutes.SPLASH,
+      page: () =>  SplashScreen(),
       binding: BindingsBuilder(() {
 
       }),

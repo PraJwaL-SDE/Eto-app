@@ -1,4 +1,5 @@
 import 'package:eto_ride/app/core/utils/enums/user_type.dart';
+import 'package:eto_ride/app/data/storage/setting_storage.dart';
 import 'package:eto_ride/app/routes/app_routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -79,6 +80,8 @@ class GetStartedController extends GetxController {
   }
 
   Future<void> finishSlides() async {
-    Get.toNamed(AppRoutes.ENTER_MOBILE);
+    SettingStorage().updateGetStartedComplete(true);
+    Get.toNamed(AppRoutes.ENTER_MOBILE,arguments: {'userType':userType});
+
   }
 }

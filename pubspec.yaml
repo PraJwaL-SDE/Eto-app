@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_native_splash: ^2.2.15
   get: ^4.7.2
-  geolocator: ^13.0.2
+  geolocator: ^14.0.0
   flutter_map: ^8.0.0
   latlong2: ^0.9.1
   firebase_auth: ^5.5.1
@@ -29,6 +29,13 @@ dependencies:
   google_maps_flutter: ^2.10.1
   dashed_circle: ^0.0.2
   sliding_up_panel: ^2.0.0+1
+  uuid: ^4.5.1
+  flutter_bloc: ^9.1.0
+  get_storage: ^2.1.1
+  web_socket_channel: ^3.0.3
+  socket_io_client: ^3.1.2
+  flutter_google_maps_webservices: ^1.1.1
+  image_picker: ^1.1.2
 
 
 dev_dependencies:

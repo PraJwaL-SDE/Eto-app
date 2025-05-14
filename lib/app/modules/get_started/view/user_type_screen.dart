@@ -1,3 +1,4 @@
+import 'package:eto_ride/app/data/storage/setting_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/enums/user_type.dart';
@@ -65,11 +66,13 @@ class UserTypeScreen extends GetView<UserTypeController> {
             const SizedBox(height: 30),
             Obx(
                   () => ContinueBtn(
-                onPressed: ()=> controller.isUserTypeSelected()
-                    ? () {
-                  Get.toNamed(AppRoutes.GET_STARTED);
-                }
-                    : null, // Disable button if no user type is selected
+                onPressed: (){
+                  if(controller.isUserTypeSelected()) {
+                    SettingStorage().updateUserType(controller.selectedUserType.value ?? UserType.PASSENGER);
+                    Get.toNamed(AppRoutes.GET_STARTED,);
+                  }
+                },
+
                 text: "Continue",
                 backgroundColor: controller.isUserTypeSelected()
                     ? Colors.black

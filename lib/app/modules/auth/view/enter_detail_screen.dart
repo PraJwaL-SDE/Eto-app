@@ -1,104 +1,105 @@
-
+import 'package:eto_ride/app/data/models/driver_model.dart';
+import 'package:eto_ride/app/data/provider/driver_provider.dart';
+import 'package:eto_ride/app/data/provider/passenger_provider.dart';
+import 'package:eto_ride/app/modules/auth/controller/complete_detail_controller.dart';
 import 'package:eto_ride/app/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';  // Import Cubit
+import '../../../core/utils/enums/user_type.dart';
+import '../../../data/models/passenger_model.dart';
 import '../../common/view/continue_btn.dart';
 import '../../common/view/custom_text.dart';
+import '../cubit/complete_detail_cubit.dart';
 
 
 
-class EnterDetailScreen extends StatefulWidget {
-  const EnterDetailScreen({super.key});
+class EnterDetailScreen extends StatelessWidget {
+  final UserType userType;
+  final dynamic user; // Use `dynamic` for flexibility with different user types.
 
-  @override
-  State<EnterDetailScreen> createState() => _EnterDetailScreenState();
-}
+  final controller = Get.put(CompleteDetailController());
+   EnterDetailScreen({
+    super.key,
+    this.userType = UserType.PASSENGER,
+    required this.user,
+  });
 
-class _EnterDetailScreenState extends State<EnterDetailScreen> {
-  // Controllers for input fields
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-
-  @override
-  void dispose() {
-    // Dispose controllers to avoid memory leaks
-    firstNameController.dispose();
-    lastNameController.dispose();
-    dobController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+
+
+    void handleSubmit() async {
+      await controller .updateUserDetail(userType, user);
+      print("Handle submit logic with controllers");
+    }
+
     return Scaffold(
-      appBar: AppBar(leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomText(
+            const CustomText(
               text: "Enter Details",
               fontSize: 40,
               fontWeight: FontWeight.bold,
             ),
             const SizedBox(height: 8),
-            CustomText(
+            const CustomText(
               text: "Enter your basic details to get started",
               fontSize: 18,
             ),
             const SizedBox(height: 16),
-            // Custom input fields
             CustomDetailInput(
               label: "First Name",
               hint: "Please enter first name",
-              controller: firstNameController,
+              controller: controller.firstNameController,
               inputType: TextInputType.text,
             ),
             const SizedBox(height: 16),
             CustomDetailInput(
               label: "Last Name",
               hint: "Please enter last name",
-              controller: lastNameController,
+              controller: controller.lastNameController,
               inputType: TextInputType.text,
             ),
             const SizedBox(height: 16),
             CustomDetailInput(
               label: "Date of Birth",
               hint: "DD/MM/YYYY",
-              controller: dobController,
+              controller: controller.dobController,
               inputType: TextInputType.datetime,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9/]')),
-                LengthLimitingTextInputFormatter(10), // Maximum 10 characters
+                LengthLimitingTextInputFormatter(10),
               ],
             ),
             const SizedBox(height: 16),
             ContinueBtn(
-              onPressed: () {
-                Get.toNamed(AppRoutes.SHELL);
-              },
-              text: "Continue",
+              onPressed: handleSubmit,
+              text: controller.isLoading.value ? "Loading": "Continue",
               backgroundColor: Colors.black,
               showArrow: false,
             ),
-
           ],
         ),
       ),
     );
   }
 }
+
+
 
 class CustomDetailInput extends StatelessWidget {
   final String label;

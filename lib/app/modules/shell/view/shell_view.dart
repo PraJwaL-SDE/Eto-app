@@ -1,3 +1,4 @@
+import 'package:eto_ride/app/core/utils/enums/user_type.dart';
 import 'package:eto_ride/app/modules/account/view/driver_account_screen.dart';
 import 'package:eto_ride/app/modules/activity/view/driver_activity_screen.dart';
 import 'package:eto_ride/app/modules/home/view/driver_home_screen.dart';
@@ -11,18 +12,29 @@ import '../../service/view/service_view.dart';
 import '../controller/shell_controller.dart';
 
 class ShellView extends GetView<ShellController> {
+  final UserType userType;
+  var user;
+
+  ShellView({super.key,  this.userType = UserType.PASSENGER,required this.user});
+
   @override
   Widget build(BuildContext context) {
+    List<Widget> _children = userType == UserType.PASSENGER ? [
+      HomeView(passenger: user),
+      ServiceView(),
+      DriverActivityScreen(),
+      DriverAccountScreen(),
+    ] : [
+      DriverHomeScreen(),
+      ServiceView(),
+      DriverActivityScreen(),
+      DriverAccountScreen(),
+    ];
     return Scaffold(
       body: Obx(
             () => IndexedStack(
           index: controller.currentIndex.value,
-          children: [
-            DriverHomeScreen(),
-            ServiceView(),
-            DriverActivityScreen(),
-            DriverAccountScreen(),
-          ],
+          children: _children,
         ),
       ),
       bottomNavigationBar: Obx(

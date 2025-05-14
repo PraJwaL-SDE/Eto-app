@@ -5,6 +5,7 @@ class SelectLanguageController extends GetxController {
 
   void updateLanguage(String language) {
     selectedLanguage.value = language;
+
   }
 
   bool isLanguageSelected() {

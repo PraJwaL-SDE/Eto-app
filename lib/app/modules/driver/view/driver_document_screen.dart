@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class DriverDocumentScreen extends GetView {
-  const DriverDocumentScreen({super.key});
+  final String driverId;
+  const DriverDocumentScreen({required this.driverId, super.key});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -94,7 +94,8 @@ class DriverDocumentScreen extends GetView {
       ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 18),
       onTap: () {
-        Get.toNamed(route);
+        // Pass the driverId when navigating to the next screen
+        Get.toNamed(route, arguments: {'driverId': driverId});
       },
     );
   }

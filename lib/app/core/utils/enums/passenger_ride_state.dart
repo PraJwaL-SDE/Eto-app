@@ -1,0 +1,7 @@
+enum PassengerRideState{
+  NONE,
+  REQUEST_SEND,
+  DRIVER_CONFIRM,
+  RIDE_STARTED,
+  RIDE_COMPLETED
+}
