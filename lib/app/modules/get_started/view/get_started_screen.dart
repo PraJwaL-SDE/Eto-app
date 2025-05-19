@@ -4,8 +4,7 @@ import 'package:get/get.dart';
 import '../controller/get_started_controller.dart';
 
 class GetStartedScreen extends GetView<GetStartedController> {
-
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../data/models/driver_model.dart';
+
 class DriverStatusCard extends StatelessWidget {
+  final Driver driver;
   final bool isOnline;
   final Function(bool) onToggleOnline;
 
@@ -8,6 +11,7 @@ class DriverStatusCard extends StatelessWidget {
     super.key,
     required this.isOnline,
     required this.onToggleOnline,
+    required this.driver
   });
 
   @override
@@ -21,25 +25,25 @@ class DriverStatusCard extends StatelessWidget {
         children: [
           /// **Driver Info**
           ListTile(
-            leading: const CircleAvatar(
+            leading:  CircleAvatar(
               radius: 28,
               foregroundImage: AssetImage("assets/icons/account/avatar.png"),
             ),
-            title: const Text(
-              "Shubham Kumar",
+            title:  Text(
+              '${driver.firstName  ?? 'Unknown'} ${driver.lastName ?? ' '}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             subtitle: Row(
               children: [
                 const Icon(Icons.star, size: 16, color: Colors.amber),
                 const SizedBox(width: 4),
-                const Text(
-                  "4.96",
+                 Text(
+                  driver.rating.toString(),
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(width: 4),
-                const Text(
-                  "(5 reviews)",
+                 Text(
+                  "(${driver.review} reviews)",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
@@ -73,17 +77,17 @@ class DriverStatusCard extends StatelessWidget {
                 children: [
                   _buildInfoColumn(
                     image: "assets/images/home/total_earning_bag.png",
-                    value: "₹300",
+                    value: "₹${driver.totalEarning}",
                     label: "Total Earnings",
                   ),
                   _buildInfoColumn(
                     image: "assets/images/home/white_auto.png",
-                    value: "10",
+                    value: "${driver.rideComplete}",
                     label: "Rides Completed",
                   ),
                   _buildInfoColumn(
                     image: "assets/images/home/white_clock.png",
-                    value: "8h",
+                    value: "${driver.activeHour}h",
                     label: "Active Hours",
                   ),
                 ],

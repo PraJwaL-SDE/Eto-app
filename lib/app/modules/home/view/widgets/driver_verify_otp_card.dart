@@ -1,9 +1,11 @@
+import 'package:eto_ride/app/data/models/ride_model.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/constant/colors/constant_colors.dart';
 import '../../../common/view/app_button.dart';
 
 class DriverVerifyOtpCard extends StatelessWidget {
-  const DriverVerifyOtpCard({super.key});
+  RideModel rideModel;
+   DriverVerifyOtpCard({super.key,required this.rideModel});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class DriverVerifyOtpCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Akash Rawat",
+                      rideModel.passengerName ?? "unknown",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
@@ -47,9 +49,9 @@ class DriverVerifyOtpCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildTripDetail("02 km", "Distance"),
+                _buildTripDetail("${rideModel.travelDistance} km", "Distance"),
                 _buildTripDetail("05 min", "Time"),
-                _buildTripDetail("₹22.00", "Estimated Price"),
+                _buildTripDetail("₹${rideModel.fare}", "Estimated Price"),
               ],
             ),
             const SizedBox(height: 16),
@@ -70,7 +72,7 @@ class DriverVerifyOtpCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppButton(
-                    text: "Decline",
+                    text: "Cancel Ride",
                     backgroundColor: Colors.grey,
                     borderRadius: 100,
                   ),
@@ -78,7 +80,7 @@ class DriverVerifyOtpCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: AppButton(
-                    text: "Accept",
+                    text: "Verify OTP",
                     backgroundColor: Colors.black,
                     borderRadius: 100,
                     textColor: Colors.white,

@@ -19,17 +19,11 @@ import '../controller/home_controller.dart'; // Import your HomeController
 class HomeView extends GetView<HomeController> {
   final Passenger passenger;
 
-
-
   HomeView({super.key, required this.passenger}) {
-    _initServices();
+    controller.passenger = passenger;
   }
 
-  void _initServices() async {
-    controller.start.value = await LocationService.getCurrentLocation();
-    controller.destination.value = LocationModel(latitude: controller.start.value.latitude, longitude: controller.start.value.longitude, name: "select location");
-    // controller.destination.value.name = "Select location";
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,77 +34,87 @@ class HomeView extends GetView<HomeController> {
           return Stack(
             children: <Widget>[
               // Positioned widget to place the card at the center bottom
-              if(controller.showPickupDrop.value)
-              Positioned(
-                bottom: 20, // Distance from the bottom
-                left: MediaQuery.of(context).size.width *
-                    0.01, // Center horizontally with padding
-                right: MediaQuery.of(context).size.width * 0.01,
-                child: AnimatedContainer(
-                  duration:
-                      const Duration(milliseconds: 300), // Animation duration
-                  curve: Curves.easeInOut, // Animation curve
-                  height: controller.showSearchLocation.value
-                      ? MediaQuery.of(context).size.height *
-                          0.85 // Expanded height
-                      : MediaQuery.of(context).size.height *
-                          0.21, // Collapsed height
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 6,
-                        offset: Offset(0, 3), // Shadow below the container
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-
-                      PickupAndDropCard(
-                        start: controller.start.value,
-                        destination: controller.destination.value,
-                        updatePickup: () {
-                          controller.showSearchLocation.value =
-                              true; // Expand the container
-                          controller.updatingPickup.value = true;
-                        },
-                        updateDrop: () {
-                          controller.showSearchLocation.value =
-                              true; // Expand the container
-                          controller.updatingDrop.value = true;
-                        },
-                        onPickupChanged: (text) {
-                          controller.searchLocation(text);
-                          controller.updatingPickup.value = true;
-                          controller.updatingDrop.value = false;
-                          if(!controller.showSearchLocation.value){
-                            controller.showSearchLocation.value = true;
-                          }
-                        },
-                        onDropChanged: (text) {
-                          controller.searchLocation(text);
-                          controller.updatingPickup.value = false;
-                          controller.updatingDrop.value = true;
-                          if(!controller.showSearchLocation.value){
-                            controller.showSearchLocation.value = true;
-                          }
-                        },
-                        pickupTextEditingController: controller.pickupTextEditingController,
-                        dropoffTextEditingController: controller.dropoffTextEditingController,
-                      ),
-                      if (controller.showSearchLocation.value)
-                        Expanded(
-                          child: _searchResults(controller.searchLocations,
-                              isPickup: true),
-                        ),
-                    ],
+              if (controller.isLocationLoading.value)
+                Positioned.fill(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: ConstantColors.primary,
+                    ),
                   ),
                 ),
-              ),
+
+              if (controller.showPickupDrop.value && !controller.isLocationLoading.value)
+                Positioned(
+                  bottom: 20, // Distance from the bottom
+                  left: MediaQuery.of(context).size.width *
+                      0.01, // Center horizontally with padding
+                  right: MediaQuery.of(context).size.width * 0.01,
+                  child: AnimatedContainer(
+                    duration:
+                        const Duration(milliseconds: 300), // Animation duration
+                    curve: Curves.easeInOut, // Animation curve
+                    height: controller.showSearchLocation.value
+                        ? MediaQuery.of(context).size.height *
+                            0.85 // Expanded height
+                        : MediaQuery.of(context).size.height *
+                            0.21, // Collapsed height
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 6,
+                          offset: Offset(0, 3), // Shadow below the container
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        PickupAndDropCard(
+                          start: controller.start.value,
+                          destination: controller.destination.value,
+                          updatePickup: () {
+                            controller.showSearchLocation.value =
+                                true; // Expand the container
+                            controller.updatingPickup.value = true;
+                          },
+                          updateDrop: () {
+                            controller.showSearchLocation.value =
+                                true; // Expand the container
+                            controller.updatingDrop.value = true;
+                          },
+                          onPickupChanged: (text) {
+                            controller.searchLocation(text);
+                            controller.updatingPickup.value = true;
+                            controller.updatingDrop.value = false;
+                            if (!controller.showSearchLocation.value) {
+                              controller.showSearchLocation.value = true;
+                            }
+                          },
+                          onDropChanged: (text) {
+                            controller.searchLocation(text);
+                            controller.updatingPickup.value = false;
+                            controller.updatingDrop.value = true;
+                            if (!controller.showSearchLocation.value) {
+                              controller.showSearchLocation.value = true;
+                            }
+                          },
+                          pickupTextEditingController:
+                              controller.pickupTextEditingController,
+                          dropoffTextEditingController:
+                              controller.dropoffTextEditingController,
+                        ),
+                        if (controller.showSearchLocation.value)
+                          Expanded(
+                            child: _searchResults(controller.searchLocations,
+                                isPickup: true),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               if (controller.showServiceList.value)
                 Positioned(
                   bottom: 20,
@@ -118,7 +122,6 @@ class HomeView extends GetView<HomeController> {
                   right: MediaQuery.of(context).size.width * 0.05,
                   child: serviceList(),
                 ),
-
 
               if (controller.showSearchingLoading.value)
                 Positioned(
@@ -135,10 +138,7 @@ class HomeView extends GetView<HomeController> {
                     child: Column(
                       spacing: 10,
                       mainAxisSize: MainAxisSize.min,
-                      children: [
-                        DriverPickupDetail(),
-                        DriverDetailOptions()
-                      ],
+                      children: [DriverPickupDetail(), DriverDetailOptions()],
                     ),
                   ),
                 ),
@@ -150,9 +150,7 @@ class HomeView extends GetView<HomeController> {
   }
   // 0 for pick and 1 for drop
 
-  Widget _searchResults(List<LocationModel> locations,
-      {bool isPickup = true}) {
-
+  Widget _searchResults(List<LocationModel> locations, {bool isPickup = true}) {
     return ListView.builder(
       itemCount: locations.length,
       itemBuilder: (context, index) {
@@ -161,11 +159,11 @@ class HomeView extends GetView<HomeController> {
           padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 8.0),
           child: GestureDetector(
             onTap: () {
-              if(controller.updatingPickup.value){
+              if (controller.updatingPickup.value) {
                 controller.updatingPickup.value = false;
                 controller.start.value = location;
                 controller.pickupTextEditingController.text = location.name;
-              }else if(controller.updatingDrop.value){
+              } else if (controller.updatingDrop.value) {
                 controller.updatingDrop.value = false;
                 controller.destination.value = location;
                 controller.dropoffTextEditingController.text = location.name;
@@ -222,7 +220,8 @@ class HomeView extends GetView<HomeController> {
 
     void _onTabSelected(int index) {
       _selectedTabIndex.value = index;
-      _pageController.jumpToPage(index); // Instantly switch to the selected page
+      _pageController
+          .jumpToPage(index); // Instantly switch to the selected page
     }
 
     void _onPageChanged(int index) {
@@ -288,7 +287,6 @@ class HomeView extends GetView<HomeController> {
 
   Widget passengerTab() {
     final ServiceData serviceData = ServiceData();
-
     return SizedBox.expand(
       child: SingleChildScrollView(
         child: Column(
@@ -330,15 +328,18 @@ class HomeView extends GetView<HomeController> {
 
                 // Display the list of recommended services
                 final List<Servicemodel> recommendedList = snapshot.data!;
-                
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: List.generate(
                       recommendedList.length,
-                      (index) => RecommondedListItem(
-                        servicemodel: recommendedList[index],
+                      (index) => GestureDetector(
+                        onTap: () => controller.selectService(recommendedList[index]),
+                        child: RecommondedListItem(
+                          servicemodel: recommendedList[index],
+                        ),
                       ),
                     ),
                   ),
@@ -420,8 +421,8 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             FutureBuilder<List<Servicemodel>>(
-              future:
-                  serviceData.getRecommondedPassengerList(controller.start.value, controller.destination.value),
+              future: serviceData.getRecommondedPassengerList(
+                  controller.start.value, controller.destination.value),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());

@@ -1,10 +1,14 @@
+import 'package:eto_ride/app/data/models/ride_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constant/colors/constant_colors.dart';
 import '../../../common/view/app_button.dart';
 
 class RideStartedOptions extends StatelessWidget {
-  const RideStartedOptions({super.key});
+  RideModel rideModel;
+  Function endRide;
+
+   RideStartedOptions({super.key,required this.rideModel,required this.endRide});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class RideStartedOptions extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Akash Rawat",
+                      rideModel.passengerName ?? "Unknown",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
@@ -50,9 +54,9 @@ class RideStartedOptions extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildTripDetail("02 km", "Distance"),
+                _buildTripDetail("${rideModel.travelDistance} km", "Distance"),
                 _buildTripDetail("05 min", "Time"),
-                _buildTripDetail("₹22.00", "Estimated Price"),
+                _buildTripDetail("₹${rideModel.fare}", "Estimated Price"),
               ],
             ),
             const SizedBox(height: 16),
@@ -64,6 +68,9 @@ class RideStartedOptions extends StatelessWidget {
                 Expanded(
                   child: AppButton(
                     text: "End Ride",
+                    onPressed: (){
+
+                    },
                     backgroundColor: Colors.black,
                     borderRadius: 100,
                     textColor: Colors.white,

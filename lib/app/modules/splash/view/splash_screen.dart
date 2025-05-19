@@ -1,3 +1,4 @@
+import 'package:eto_ride/app/data/storage/driver_storage.dart';
 import 'package:eto_ride/app/data/storage/passenger_storage.dart';
 import 'package:eto_ride/app/data/storage/setting_storage.dart';
 import 'package:eto_ride/app/routes/app_routes.dart';
@@ -36,7 +37,9 @@ class _SplashScreenState extends State<SplashScreen> {
         final user = await PassengerStorage().getCurrentPassenger();
         if (user == null) {
           // Navigate to login if user is not found
-          Get.offAndToNamed(AppRoutes.ENTER_MOBILE);
+          Get.offAndToNamed(AppRoutes.ENTER_MOBILE,arguments: {
+            'userType':settings.userType
+          });
         } else {
           // Navigate to the main app shell
           Get.offAndToNamed(AppRoutes.SHELL, arguments: {
@@ -44,7 +47,21 @@ class _SplashScreenState extends State<SplashScreen> {
             'user': user,
           });
         }
-      } else {
+      } else if(settings.userType == UserType.DRIVER){
+        final user = await DriverStorage().getCurrentDriver();
+        if (user == null) {
+          // Navigate to login if user is not found
+          Get.offAndToNamed(AppRoutes.ENTER_MOBILE,arguments: {
+            'userType':settings.userType
+          });
+        } else {
+          // Navigate to the main app shell
+          Get.offAndToNamed(AppRoutes.SHELL, arguments: {
+            'userType': UserType.DRIVER,
+            'user': user,
+          });
+        }
+      }else {
         // Handle other user types (e.g., drivers) if required
         print("User type not handled: ${settings.userType}");
         Get.offAndToNamed(AppRoutes.SELECT_LANGUAGE);

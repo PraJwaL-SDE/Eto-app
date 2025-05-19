@@ -32,7 +32,7 @@ class EnterDetailScreen extends StatelessWidget {
 
 
     void handleSubmit() async {
-      await controller .updateUserDetail(userType, user);
+      await controller.updateUserDetail(userType, user);
       print("Handle submit logic with controllers");
     }
 

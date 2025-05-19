@@ -1,9 +1,11 @@
+import 'package:eto_ride/app/data/models/ride_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constant/colors/constant_colors.dart';
 
 class RideStartedStatus extends StatelessWidget {
-  const RideStartedStatus({super.key});
+  RideModel rideModel;
+   RideStartedStatus({super.key,required this.rideModel});
 
   @override
   Widget build(BuildContext context) {

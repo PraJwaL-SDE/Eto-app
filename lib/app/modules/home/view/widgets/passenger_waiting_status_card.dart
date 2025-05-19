@@ -1,8 +1,10 @@
 import 'package:eto_ride/app/core/constant/colors/constant_colors.dart';
+import 'package:eto_ride/app/data/models/ride_model.dart';
 import 'package:flutter/material.dart';
 
 class PassengerWaitingStatusCard extends StatelessWidget {
-  const PassengerWaitingStatusCard({super.key});
+  RideModel rideModel;
+   PassengerWaitingStatusCard({super.key, required this.rideModel});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class PassengerWaitingStatusCard extends StatelessWidget {
                         size: 28,
                       ),
                       title: Text(
-                        "1207 W. Jersey St. Montreal, 57867",
+                        rideModel.start.name,
                         style: TextStyle(
                           fontSize: 14, // Normal text size
                           color: Colors.white,

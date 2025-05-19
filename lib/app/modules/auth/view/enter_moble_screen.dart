@@ -154,7 +154,7 @@ class EnterMobileScreen extends StatelessWidget {
                     width: 90,
                     child: ElevatedButton(
                       onPressed: () async{
-                        var user = await controller.signInWithGoogle();
+                        var user = await controller.signInWithGoogle(userType: userType);
                         Get.toNamed(AppRoutes.ENTER_DETAIL,arguments: {
                           'user':user,
                           'userType':userType

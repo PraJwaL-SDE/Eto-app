@@ -22,10 +22,10 @@ class ServiceData {
           time: DateTime.now().subtract(const Duration(minutes: 2)),
           seats: 3,
           finalPrice: driver['fare'],
-          driverId: driver['driver_id'],
+          driverId: driver['driver_id'] ?? "null",
           driverPosition: LocationModel(latitude: driver['position']['latitude'], longitude: driver['position']['longitude'], name: 'name'),
           distanceToDriver: driver['distance'],
-          driverSocketId: driver['socket_id']
+          driverSocketId: driver['socket_id'] ?? "null"
         )
       );
     }

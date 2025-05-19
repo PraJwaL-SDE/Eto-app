@@ -26,29 +26,7 @@ class Servicemodel {
     required this.driverSocketId,
   });
 
-  Servicemodel copyWith({
-    String? vehicleType,
-    DateTime? time,
-    int? seats,
-    double? initialPrice,
-    double? finalPrice,
-    String? driverId,
-    double? distanceToDriver,
-    LocationModel? driverPosition,
-    String? driverSocketId,
-  }) {
-    return Servicemodel(
-      vehicleType: vehicleType ?? this.vehicleType,
-      time: time ?? this.time,
-      seats: seats ?? this.seats,
-      initialPrice: initialPrice ?? this.initialPrice,
-      finalPrice: finalPrice ?? this.finalPrice,
-      driverId: driverId ?? this.driverId,
-      distanceToDriver: distanceToDriver ?? this.distanceToDriver,
-      driverPosition: driverPosition ?? this.driverPosition,
-      driverSocketId: driverSocketId ?? this.driverSocketId,
-    );
-  }
+
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

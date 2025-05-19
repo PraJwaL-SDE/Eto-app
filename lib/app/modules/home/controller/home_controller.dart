@@ -1,9 +1,20 @@
+import 'dart:convert';
+
+import 'package:eto_ride/app/core/utils/private_keys.dart';
 import 'package:eto_ride/app/data/models/ServiceModel.dart';
 import 'package:eto_ride/app/data/models/location_model.dart';
+import 'package:eto_ride/app/data/models/passenger_model.dart';
+import 'package:eto_ride/app/data/models/ride_model.dart';
+import 'package:eto_ride/app/data/provider/passenger/passenger_websocket_manager.dart';
+import 'package:eto_ride/app/data/provider/passenger_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
+
+import '../../../core/services/location_service.dart';
 
 class HomeController extends GetxController {
   // late GoogleMapController mapController;
@@ -18,18 +29,20 @@ class HomeController extends GetxController {
   var showPickupDrop = true.obs;
   var showDriverDetail = false.obs;
   var showTripDetail = false.obs;
+  var isLocationLoading = false.obs;
+  late Passenger passenger;
+  final PassengerWebsocketManager passengerWebsocketManager = PassengerWebsocketManager();
+  late double travelDistance = 0;
 
-  Rx<LocationModel> start = LocationModel(latitude: 0, longitude: 0, name: '').obs;
-  Rx<LocationModel> destination = LocationModel(latitude: 0, longitude: 0, name: '').obs;
+  Rx<LocationModel> start =
+      LocationModel(latitude: 0, longitude: 0, name: '').obs;
+  Rx<LocationModel> destination =
+      LocationModel(latitude: 0, longitude: 0, name: '').obs;
 
   TextEditingController pickupTextEditingController = TextEditingController();
   TextEditingController dropoffTextEditingController = TextEditingController();
 
-
-
-
-  Rx<Servicemodel?> selectedService = null.obs;
-
+  late Servicemodel selectedService ;
   void collapseAll() {
     showSearchLocation.value = false;
     updatingPickup.value = false;
@@ -45,7 +58,7 @@ class HomeController extends GetxController {
 
   HomeController() {
     _places =
-        GoogleMapsPlaces(apiKey: 'AIzaSyAQkohycA0H6pRFHIpxuYf4Pb4wEwgZqpI');
+        GoogleMapsPlaces(apiKey: PrivateKeys.googleMapApiKey);
   }
 
   void searchLocation(String query) async {
@@ -95,6 +108,23 @@ class HomeController extends GetxController {
     }
   }
 
+  void _initServices() async {
+    isLocationLoading.value = true;
+
+    start.value = await LocationService.getCurrentLocation();
+    destination.value = LocationModel(
+        latitude: start.value.latitude,
+        longitude: start.value.longitude,
+        name: "select location");
+    // controller.destination.value.name = "Select location";
+    isLocationLoading.value = false;
+
+
+    await passengerWebsocketManager.startService();
+    print("web socket start service");
+
+  }
+
   void onMapCreated(GoogleMapController controller) {
     // mapController = controller;
   }
@@ -110,28 +140,43 @@ class HomeController extends GetxController {
     ));
     // Add more markers as needed.
     checkForUpdates();
-
+    _initServices();
   }
 
-  void checkForUpdates() async{
+  void checkForUpdates() async {}
 
+  void storeState() {}
+  void selectService(Servicemodel serviceModel) async{
+    print("service selected " + serviceModel.toJson());
+    selectedService = serviceModel;
+    RideModel ride = RideModel(
+      id: Uuid().v4(),
+      start: start.value,
+      destination: destination.value,
+      fare: selectedService!.finalPrice,
+      passengerId: passenger.id,
+      seatCount: selectedService!.seats,
+      driverId: selectedService!.driverId,
+      luggage: true,
+      distance: selectedService!.distanceToDriver,
+      travelDistance: travelDistance,
+    );
+    await PassengerProvider().addRideRequest(ride);
+
+
+    passengerWebsocketManager.sendMessage('select-driver', {
+      "receiver": selectedService!.driverSocketId,
+      "driver_id": selectedService!.driverId,
+      "ride":
+        ride.toJson(),
+
+    });
+    print("message send to socket");
+    collapseAll();
+    showDriverDetail.value = true;
   }
 
-  void storeState(){
+  void startRide() {}
 
-
-  }
-  void selectService(){}
-
-
-
-  void startRide(){
-
-  }
-
-  void completeRide(){
-
-  }
-
-
+  void completeRide() {}
 }

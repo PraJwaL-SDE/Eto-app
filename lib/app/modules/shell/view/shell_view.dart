@@ -25,7 +25,7 @@ class ShellView extends GetView<ShellController> {
       DriverActivityScreen(),
       DriverAccountScreen(),
     ] : [
-      DriverHomeScreen(),
+      DriverHomeScreen(driver: user,),
       ServiceView(),
       DriverActivityScreen(),
       DriverAccountScreen(),

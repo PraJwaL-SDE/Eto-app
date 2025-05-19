@@ -1,4 +1,5 @@
 import 'package:eto_ride/app/core/utils/enums/user_type.dart';
+import 'package:eto_ride/app/data/storage/driver_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,7 @@ class CompleteDetailController extends GetxController{
               'user': passenger,
             },
           );
+
         }
       } else {
         final Driver driver = user as Driver;
@@ -44,6 +46,7 @@ class CompleteDetailController extends GetxController{
         final res = await DriverProvider.updateDriverData(driver);
 
         if (res) {
+          DriverStorage().updateAndSaveDriver(driver);
           Get.toNamed(
             AppRoutes.SHELL,
             arguments: {

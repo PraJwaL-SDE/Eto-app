@@ -5,13 +5,18 @@ class Driver {
   final String email;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-   String? name;
-   String? contact;
-   DateTime? dob;
-   int? age;
-   int? coin;
-   String? firstName;
-   String? lastName;
+  String? name;
+  String? contact;
+  DateTime? dob;
+  int? age;
+  int? coin;
+  String? firstName;
+  String? lastName;
+  double? rideComplete;
+  double? totalEarning;
+  double? review;
+  double? rating;
+  double? activeHour;
 
   Driver({
     required this.id,
@@ -25,6 +30,11 @@ class Driver {
     this.coin,
     this.firstName,
     this.lastName,
+    this.rideComplete,
+    this.totalEarning,
+    this.review,
+    this.rating,
+    this.activeHour,
   });
 
   factory Driver.fromJson(Map<String, dynamic> json) {
@@ -44,6 +54,11 @@ class Driver {
       coin: json['coin'] as int?,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
+      rideComplete: (json['ride_complete'] as num?)?.toDouble(),
+      totalEarning: (json['total_earning'] as num?)?.toDouble(),
+      review: (json['review'] as num?)?.toDouble(),
+      rating: (json['rating'] as num?)?.toDouble(),
+      activeHour: (json['active_hour'] as num?)?.toDouble(),
     );
   }
 
@@ -60,6 +75,11 @@ class Driver {
       'coin': coin,
       'first_name': firstName,
       'last_name': lastName,
+      'ride_complete': rideComplete,
+      'total_earning': totalEarning,
+      'review': review,
+      'rating': rating,
+      'active_hour': activeHour,
     };
   }
 }

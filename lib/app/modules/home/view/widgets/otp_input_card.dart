@@ -1,8 +1,15 @@
+import 'package:eto_ride/app/modules/common/view/continue_btn.dart';
+import 'package:eto_ride/app/modules/home/controller/driver_home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../core/constant/colors/constant_colors.dart';
 
 class OtpInputCard extends StatelessWidget {
-  const OtpInputCard({super.key});
+  final Function verifyOtp;
+  final DriverHomeController controller;
+  final bool isLoading;
+
+  OtpInputCard({super.key, required this.verifyOtp, required this.controller, this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +74,44 @@ class OtpInputCard extends StatelessWidget {
                       fontSize: 20, // Large text for OTP digits
                       fontWeight: FontWeight.bold,
                     ),
+                    onChanged: (value) {
+                      controller.setOtpValue(index, value);
+                      if (value.isNotEmpty && index < 3) {
+                        // Move to the next input field
+                        FocusScope.of(context).nextFocus();
+                      } else if (value.isEmpty && index > 0) {
+                        // Move to the previous input field
+                        FocusScope.of(context).previousFocus();
+                      }
+                    },
                   ),
                 ),
               ),
+            ),
+
+            const SizedBox(height: 20),
+
+            /// **Loading or Continue Button**
+            isLoading
+                ? CircularProgressIndicator(
+              color: ConstantColors.primary,
+            )
+                : ContinueBtn(
+              onPressed: () {
+                if (controller.otpFields.join().length == 4) {
+                  verifyOtp(controller.otpFields.join());
+                } else {
+                  Get.snackbar(
+                    "Error",
+                    "Please enter a valid 4-digit OTP",
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                }
+              },
+              text: "Verify",
+              textColor: Colors.white,
+              backgroundColor: Colors.black,
+              showArrow: false,
             ),
           ],
         ),

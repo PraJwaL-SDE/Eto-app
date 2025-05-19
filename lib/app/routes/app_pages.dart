@@ -113,8 +113,9 @@ class AppPages {
     GetPage(
       name: AppRoutes.GET_STARTED,
       page: () => GetStartedScreen(),
+
       binding: BindingsBuilder(() {
-        Get.lazyPut<GetStartedController>(() => GetStartedController(userType: UserType.PASSENGER));
+        Get.lazyPut<GetStartedController>(() => GetStartedController(userType: Get.arguments['userType']));
       }),
     ),
 

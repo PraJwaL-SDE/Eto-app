@@ -1,6 +1,7 @@
 import 'dart:convert'; // For JSON decoding
 
 import 'package:eto_ride/app/core/utils/api_config.dart';
+import 'package:eto_ride/app/data/models/ride_model.dart';
 import '../models/passenger_model.dart'; // Assuming you have a Passenger model
 import 'package:http/http.dart' as http;
 
@@ -41,4 +42,55 @@ class PassengerProvider {
       return false;
     }
   }
+
+  Future<int> getRideOtp(String ride_id) async {
+    try {
+      // Make the HTTP GET request
+      final response = await http.get(Uri.parse(ApiConfig.getRideOtp + "?ride_id=$ride_id"));
+
+      // Check for successful response
+      if (response.statusCode == 200) {
+        // Parse the response body
+        final responseData = json.decode(response.body);
+        // Extract the OTP value
+        if (responseData != null && responseData['otp'] != null) {
+          return responseData['otp'];
+        } else {
+          throw Exception("OTP not found in response");
+        }
+      } else {
+        throw Exception("Failed to fetch OTP: ${response.statusCode}");
+      }
+    } catch (e) {
+      // Handle errors
+      throw Exception("Error getting ride OTP: $e");
+    }
+  }
+
+  Future<bool> addRideRequest(RideModel ride) async {
+    try {
+      final response = await http.post(
+        Uri.parse(ApiConfig.addRideRequest),
+        headers: {
+          'Content-Type': 'application/json', // Set the content type to JSON
+        },
+        body: jsonEncode({
+          "ride": ride.toJson(), // Serialize the ride model
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print("Ride request added successfully: ${response.body}");
+        return true;
+      } else {
+        print(
+            "Failed to add ride request. Status code: ${response.statusCode}, Response: ${response.body}");
+        return false;
+      }
+    } catch (e) {
+      print("Error adding ride request: $e");
+      return false;
+    }
+  }
+
 }

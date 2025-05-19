@@ -1,7 +1,9 @@
+import 'package:eto_ride/app/data/models/ride_model.dart';
 import 'package:flutter/material.dart';
 
 class RideRequestCard extends StatelessWidget {
-  const RideRequestCard({super.key});
+  RideModel rideModel;
+   RideRequestCard({super.key, required this.rideModel});
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +36,8 @@ class RideRequestCard extends StatelessWidget {
               leading: const CircleAvatar(
                 foregroundImage: AssetImage("assets/icons/account/avatar.png"),
               ),
-              title: const Text(
-                "Akash Rawat",
+              title:  Text(
+                rideModel.passengerName ?? "Passenger",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               subtitle: Padding(
@@ -58,17 +60,17 @@ class RideRequestCard extends StatelessWidget {
               ),
 
               /// **Ride Details**
-              trailing: const Column(
+              trailing:  Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "₹30", // Price (Added ₹ symbol for clarity)
+                    "₹${rideModel.fare}", // Price (Added ₹ symbol for clarity)
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
                   Text(
-                    "Estimated 3.2 km",
+                    "Estimated ${rideModel.travelDistance} km",
                     style: TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                 ],

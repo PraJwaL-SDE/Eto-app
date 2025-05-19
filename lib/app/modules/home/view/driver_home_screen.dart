@@ -13,8 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../data/models/driver_model.dart';
+
 class DriverHomeScreen extends GetView<DriverHomeController> {
-  const DriverHomeScreen({super.key});
+  Driver driver;
+  DriverHomeScreen({super.key, required this.driver}) {
+    controller.driver = driver;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +48,10 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                 left: 16,
                 right: 16,
                 child: SizedBox(
-
                   child: DriverStatusCard(
-                    isOnline: false,
-                    onToggleOnline: (val) => {},
+                    isOnline: controller.isOnline.value,
+                    onToggleOnline: controller.updateDriverOnline,
+                    driver: controller.driver,
                   ),
                 ),
               ),
@@ -68,17 +73,17 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                   ),
                   child: ListView.builder(
                     padding: const EdgeInsets.all(16.0),
-                    itemCount: 3,
+                    itemCount: controller.rides.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: GestureDetector(
                           onTap: () {
-                            controller.showRideRequest.value = false;
-                            controller.showDriverStatus.value = false;
+                            controller.selectedRide = controller.rides[index];
+                            controller.resetAllWidgets();
                             controller.showRideRequestExpanded.value = true;
                           },
-                          child: RideRequestCard(),
+                          child: RideRequestCard(rideModel: controller.rides[index],),
                         ),
                       );
                     },
@@ -99,10 +104,13 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        controller.showRideRequestExpanded.value = false;
-                        controller.showVerifyOtpWidgets.value = true;
+
                       },
-                      child: RideRequestExpandedCard(),
+                      child: RideRequestExpandedCard(
+                        rideModel: controller.selectedRide,
+                        onAccept: () => controller
+                            .driverRiderResponse(controller.selectedRide),
+                      ),
                     ),
                   ),
                 ),
@@ -122,7 +130,7 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: PassengerWaitingStatusCard(),
+                        child: PassengerWaitingStatusCard(rideModel: controller.selectedRide,),
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -134,7 +142,7 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                             controller.showVerifyOtpWidgets.value = false;
                             controller.showOtpBoxes.value = true;
                           },
-                          child: DriverVerifyOtpCard(),
+                          child: DriverVerifyOtpCard(rideModel: controller.selectedRide,),
                         ),
                       ),
                     ],
@@ -159,7 +167,7 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                         controller.showOtpBoxes.value = false;
                         controller.showTripStarted.value = true;
                       },
-                      child: OtpInputCard(),
+                      child: OtpInputCard(verifyOtp: controller.verifyOtp,controller: controller,isLoading: controller.isOptVerifying.value,),
                     ),
                   ),
                 ),
@@ -178,7 +186,7 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: RideStartedStatus(),
+                        child: RideStartedStatus(rideModel: controller.selectedRide,),
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -192,7 +200,7 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
                             controller.showRideComplete.value = true;
                           },
                           child: GestureDetector(
-                            child: RideStartedOptions(),
+                            child: RideStartedOptions(rideModel: controller.selectedRide,endRide: controller.endRide,),
                           ),
                         ),
                       ),

@@ -96,4 +96,32 @@ class UpdateDriverDocument {
     };
     await _postRequest(ApiConfig.updateDrivingLicense, body);
   }
+
+  Future<Map<String, dynamic>> checkDriverDocuments(String driverId) async {
+    try {
+      // Make the HTTP GET request
+      final response = await http.get(
+        Uri.parse('${ApiConfig.checkDriverDocuments}?driver_id=$driverId'),
+      );
+
+      // Check if the response status is OK
+      if (response.statusCode == 200) {
+        // Decode the JSON response
+        return jsonDecode(response.body) as Map<String, dynamic>;
+      } else {
+        // Handle non-200 responses
+        throw Exception(
+            'Failed to load driver documents. Status code: ${response
+                .statusCode}');
+      }
+    } catch (error) {
+      // Handle errors (e.g., network issues)
+      print('Error fetching driver documents: $error');
+      return {
+        'success': false,
+        'message': 'An error occurred while fetching driver documents.',
+        'error': error.toString(),
+      };
+    }
+  }
 }

@@ -53,6 +53,7 @@ class UserTypeScreen extends GetView<UserTypeController> {
                 GestureDetector(
                   onTap: () {
                     controller.updateUserType(UserType.DRIVER);
+
                   },
                   child: SelectUsertypeCard(
                     title: "Join us as Eto \nDriver Partner",
@@ -67,9 +68,11 @@ class UserTypeScreen extends GetView<UserTypeController> {
             Obx(
                   () => ContinueBtn(
                 onPressed: (){
+
                   if(controller.isUserTypeSelected()) {
+                    print(controller.selectedUserType.value);
                     SettingStorage().updateUserType(controller.selectedUserType.value ?? UserType.PASSENGER);
-                    Get.toNamed(AppRoutes.GET_STARTED,);
+                    Get.toNamed(AppRoutes.GET_STARTED,arguments: {'userType':controller.selectedUserType.value});
                   }
                 },
 

@@ -17,6 +17,7 @@ class GetStartedController extends GetxController {
   void onInit() {
     super.onInit();
     loadSlideData();
+    print(userType);
   }
 
   void loadSlideData() {
